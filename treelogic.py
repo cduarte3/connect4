@@ -17,31 +17,31 @@ def check_tie(board):
     return True
 
 def check_winner(board):
-    # Check horizontal locations for win
+    # Check horizontal for win
     for row in range(6):
         for col in range(4):
             if board[row][col] == board[row][col+1] == board[row][col+2] == board[row][col+3] != 0:
                 return board[row][col]
 
-    # Check vertical locations for win
+    # Check vertical for win
     for col in range(7):
         for row in range(3):
             if board[row][col] == board[row+1][col] == board[row+2][col] == board[row+3][col] != 0:
                 return board[row][col]
 
-    # Check positively sloped diagonals
+    # Check positive diagonals
     for row in range(3):
         for col in range(4):
             if board[row][col] == board[row+1][col+1] == board[row+2][col+2] == board[row+3][col+3] != 0:
                 return board[row][col]
 
-    # Check negatively sloped diagonals
+    # Check negative diagonals
     for row in range(3, 6):
         for col in range(4):
             if board[row][col] == board[row-1][col+1] == board[row-2][col+2] == board[row-3][col+3] != 0:
                 return board[row][col]
 
-    return 0  # No winner
+    return 0  # Return nothing if no winner
 
 def valid_move(game_board, col):
     if col > 6 or col < 0:
@@ -81,35 +81,35 @@ class GameTree:
                     for row in range(6):
                         for col in range(4):
                             if self.board[row][col:col+4].count(self.player) == 3:
-                                score += 100  # Reward for 3 pieces in a row
+                                score += 100  # Higher score for 3 pieces in a row
                             elif self.board[row][col:col+4].count(3-self.player) == 3:
-                                score -= 100  # Penalty for opponent having 3 pieces in a row
+                                score -= 100  # Lower score for opponent having 3 pieces in a row
                     return score
-            if self.player == 2:  # AI tries to maximize its score
+            if self.player == 2:  # AI tries to maximize score
                 value = -math.inf
                 for child in self.children:
                     value = max(value, child[1].minimax(alpha, beta))
                     alpha = max(alpha, value)
                     if alpha >= beta:
-                        break  # Beta cut-off
+                        break
                 return value
-            elif self.player == 1:  # Human tries to minimize its score
+            elif self.player == 1:  # Player tries to minimize score
                 value = math.inf
                 for child in self.children:
                     value = min(value, child[1].minimax(alpha, beta))
                     beta = min(beta, value)
                     if beta <= alpha:
-                        break  # Alpha cut-off
+                        break
                 return value
         
-        # generates the children of the Root and/or Node(s)
+        # generates the children of the Root or Nodes
         def generateChildren(self):
-            for col in range(7):  # Assuming a 7-column Connect 4 board
+            for col in range(7):
                 if not valid_move(self.board, col):
                     continue  # Skip this column if it's full
 
                 new_board = copy_board(self.board)
-                for row in reversed(range(6)):  # Assuming a 6-row Connect 4 board
+                for row in reversed(range(6)):
                     if new_board[row][col] == 0:
                         new_board[row][col] = self.player
                         break
@@ -180,23 +180,3 @@ class GameTree:
                 best_move = random.choice(valid_moves)
 
         return best_move
-
-'''
-game_board = []
-for i in range(5):
-    game_board.append([0, 0, 0, 0, 0, 0, 0])
-game_board.append([0, 0, 0, 0, 0, 0, 0])
-tree = GameTree(game_board, 2)
-
-def print_board(board):
-    for row in board:
-        print(row)  
-    print("\n")
-
-print_board(game_board)
-
-for i in range(5):
-    drop_piece(game_board, 2, tree.get_move())
-    print_board(game_board)
-    drop_piece(game_board, 1, random.randint(0, 6))
-'''
