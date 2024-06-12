@@ -1,5 +1,9 @@
 # Connect Four Demo
 
+### Itch.io link
+Visit my itch.io page to leave feedback or download the game contents, as well as keep up with any updates.
+https://christianduarte7.itch.io/connect-four
+
 ### Download link
 https://1drv.ms/u/s!Ai-FDZDdin_tgwrPqkwsyUBCyRmT?e=5jLDU8
 
